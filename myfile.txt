@@ -1,0 +1,847 @@
+POS using HMM
+
+import nltk
+from nltk.corpus import brown
+from collections import Counter, defaultdict
+
+nltk.download('brown')
+nltk.download('universal_tagset')
+
+corpus = brown.tagged_words(tagset='universal')[:5000]
+
+tag_count = Counter()
+word_tag_count = defaultdict(Counter)
+
+for word,tag in corpus:
+    word = word.lower()
+    tag_count[tag] += 1
+    word_tag_count[word][tag] += 1
+
+def simple_hmm(sentence):
+    words = sentence.lower().split()
+
+    for word in words:
+        print("\nWord:", word)
+        print("Tag\ttran_prob\temiss_prob\tScore")
+        best_tag = ""
+        max_score = 0
+        tran_prob = tag_count[tag]
+        emiss_prob = word_tag_count[word][tag]
+        Score = trans_prob * emiss_prob
+        print(f"{tag}\t\t{tran_prob}\t\t{emiss_prob}\t\t{Score}") 
+
+        if Score > max_score:
+            max_score = Score
+            best_tag = tag
+        print("BEST TAG", best_tag)
+sentence = input("Enter a sentence")
+simple_hmm(sentence)
+
+BUILDING A POS TAGGER 
+
+import nltk
+from nltk.corpus import treebank
+from nltk.tag import UnigramTagger
+
+# Downloads
+nltk.download('treebank')
+nltk.download('punkt')
+
+# ---------------- TRAINING DATA ----------------
+data = treebank.tagged_sents()
+
+# Split data
+
+# ---------------- TRAIN TAGGER ----------------
+print("Training POS Tagger...\n")
+tagger = UnigramTagger(train_data)
+
+# ---------------- EVALUATE ----------------
+
+print("Evaluating Tagger...")
+print("Accuracy:", round(accuracy * 100, 2), "%")
+sentence = input("\nEnter a Sentence: ")
+
+# Tag words
+tagged = tagger.tag(words)
+
+print("\nTagging sentence:\n")
+
+print("Word : POS Tag")
+print("----------------")
+
+for word, tag in tagged:
+    print(word + ":", tag)
+
+
+
+BUILDING A CHUNKER
+
+import spacy 
+nlp = spacy.load("en_core_web_sm")
+sentence = input("Enter a sentence:")
+
+doc = nlp(sentence)
+print("NOUN")
+for chunk in doc.noun_chunks:
+    print(chunk.text)
+print("VERB")
+for token in doc:
+    if token.pos_ == "VERB":
+        phrase = ""
+
+        for word in token.lefts:
+            if word.dep_ == "aux":
+                phrase += word.text + ""
+        phrase += token.text
+
+        print(phrase)
+
+
+NER 
+
+import spacy
+
+# Load model
+nlp = spacy.load("en_core_web_sm")
+
+# Function
+def perform_ner(text):
+
+    doc = nlp(text)
+
+    print("\nEntity\t\tCategory")
+    print("-" * 30)
+
+    for ent in doc.ents:
+
+        print(ent.text, "\t\t", ent.label_)
+
+# Input
+sentence = input("Enter a sentence: ")
+
+# Call function
+perform_ner(sentence)
+
+MORPHOLOGICAL ANALYSIS 
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
+# Downloads
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+
+# Input
+text = input("Enter your sentence: ")
+
+# Tokenize words
+words = word_tokenize(text)
+
+# POS tagging
+tags = nltk.pos_tag(words)
+
+# Lemmatizer
+lemmatizer = WordNetLemmatizer()
+
+# Prefixes and suffixes
+prefixes = ['un', 're', 'dis']
+suffixes = ['ing', 'ed', 'er', 'tion']
+
+# Heading
+print("\nWord\t\tCategory\tPrefix\tRoot\t\tSuffix")
+print("-" * 60)
+
+# Process each word
+for word, tag in tags:
+
+    # Root word
+    root = lemmatizer.lemmatize(word.lower())
+
+    # Find prefix
+    prefix = "None"
+
+    for p in prefixes:
+        if word.lower().startswith(p):
+            prefix = p
+
+    # Find suffix
+    suffix = "None"
+
+    for s in suffixes:
+        if word.lower().endswith(s):
+            suffix = s
+
+    print(word, "\t\t", tag, "\t\t", prefix, "\t", root, "\t\t", suffix)
+
+SYMBOL TABLE
+
+import java.io.*;
+import java.util.*;
+
+public class SymbolTable {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // Read file
+            BufferedReader br = new BufferedReader(new FileReader("input.txt"));
+
+            String line;
+
+            System.out.println("DATATYPE\tVARIABLE");
+            System.out.println("------------------------");
+
+            while((line = br.readLine()) != null) {
+
+# ---------------- OUTPUT ----------------
+words = nltk.word_tokenize(sentence)
+                // Remove semicolon
+
+# Tokenize sentence
+
+                line = line.replace(";", "");
+# ---------------- USER INPUT ----------------
+accuracy = tagger.accuracy(test_data)
+
+
+train_data = data[:3000]
+                // Split words
+
+                String[] words = line.split(" ");
+
+
+
+                // Datatype
+
+                String datatype = words[0];
+
+
+                // Variables
+
+                for(int i = 1; i < words.length; i++) {
+
+
+                    String var = words[i].replace(",", "");
+
+                    System.out.println(datatype + "\t\t" + var);
+                }
+            }
+
+
+            br.close();
+
+
+        }
+        catch(Exception e) {
+
+
+            System.out.println("File Error");
+        }
+    }
+}
+
+
+DFA
+
+import java.util.Scanner;
+
+public class DFA {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter string: ");
+
+        String str = sc.nextLine();
+
+
+        int state = 0;
+
+        // Check each character
+        for(char ch : str.toCharArray()) {
+
+
+            // Move from state 0 to 1 on 'a'
+            if(state == 0 && ch == 'a') {
+
+                state = 1;
+
+            }
+
+
+            // Move from state 1 to 2 on 'b'
+            else if(state == 1 && ch == 'b') {
+
+                state = 2;
+            }
+
+
+            // Otherwise go back to start state
+
+            else {
+
+                state = 0;
+            }
+
+        }
+
+        // Final state check
+
+        if(state == 2) {
+            System.out.println("String Accepted");
+
+        }
+        else {
+            System.out.println("String Rejected");
+
+        }
+    }
+
+}
+
+TEXT PREPROCESSING
+
+
+import re
+import string
+
+import nltk
+
+
+from bs4 import BeautifulSoup
+
+from nltk.corpus import stopwords
+
+from nltk.tokenize import word_tokenize
+
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+from spellchecker import SpellChecker
+# Downloads
+
+
+nltk.download('punkt')
+
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+
+# Input
+text = input("Enter text: ")
+
+
+# ---------------- LOWERCASE ----------------
+text = text.lower()
+
+
+print("\n1. Lowercase:\n", text)
+
+
+# ---------------- REMOVE HTML ----------------
+
+text = BeautifulSoup(text, "html.parser").get_text()
+
+
+print("\n2. Remove HTML:\n", text)
+
+
+# ---------------- REMOVE NUMBERS ----------------
+text = re.sub(r'\d+', '', text)
+
+
+print("\n3. Remove Numbers:\n", text)
+
+# ---------------- REMOVE PUNCTUATION ----------------
+text = text.translate(str.maketrans('', '', string.punctuation))
+
+print("\n4. Remove Punctuation:\n", text)
+
+
+# ---------------- TOKENIZATION ----------------
+
+tokens = word_tokenize(text)
+
+print("\n5. Tokens:\n", tokens)
+
+# ---------------- STOPWORD REMOVAL ----------------
+stop_words = set(stopwords.words('english'))
+
+filtered = []
+
+for word in tokens:
+
+    if word not in stop_words:
+        filtered.append(word)
+
+print("\n6. After Stopword Removal:\n", filtered)
+
+# ---------------- SPELL CHECK ----------------
+spell = SpellChecker()
+
+corrected = []
+
+for word in filtered:
+
+    corrected.append(spell.correction(word))
+
+print("\n7. Spell Check:\n", corrected)
+
+
+# ---------------- STEMMING ----------------
+
+stemmer = PorterStemmer()
+
+
+stemmed = []
+
+for word in corrected:
+
+
+    stemmed.append(stemmer.stem(word))
+
+
+print("\n8. Stemming:\n", stemmed)
+
+# ---------------- LEMMATIZATION ----------------
+
+lemmatizer = WordNetLemmatizer()
+
+lemmatized = []
+
+
+for word in corrected:
+
+
+    lemmatized.append(lemmatizer.lemmatize(word))
+
+print("\n9. Lemmatization:\n", lemmatized)
+
+
+
+PREPROCESSING OF WORDS
+
+
+import nltk
+import re
+
+from collections import Counter
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+from nltk.util import bigrams
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+
+# Downloads
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('vader_lexicon')
+
+
+# Input
+text = input("Enter your paragraph: ")
+
+
+# ---------------- TOKENIZATION ----------------
+sentences = nltk.sent_tokenize(text)
+
+
+words = nltk.word_tokenize(text)
+
+
+clean_words = []
+
+
+for word in words:
+
+    if word.isalnum():
+
+
+        clean_words.append(word.lower())
+
+
+print("\n========== NLP REPORT ==========")
+
+
+# ---------------- SENTENCE ANALYSIS ----------------
+print("\n[1] SENTENCE ANALYSIS")
+
+
+print("Total Sentences:", len(sentences))
+
+avg = len(clean_words) / len(sentences)
+
+print("Average Sentence Length:", round(avg, 2))
+
+# ---------------- WORD FREQUENCY ----------------
+
+print("\n[2] WORD FREQUENCY")
+
+
+freq = Counter(clean_words)
+
+
+print(freq.most_common(10))
+
+
+# ---------------- LEXICAL RICHNESS ----------------
+
+print("\n[3] LINGUISTIC STATS")
+
+
+unique = set(clean_words)
+
+
+richness = len(unique) / len(clean_words)
+
+
+print("Lexical Richness:", round(richness, 2))
+
+# ---------------- REGEX ----------------
+
+print("\n[4] PATTERN EXTRACTION")
+
+
+ing_words = re.findall(r'\b\w+ing\b', text)
+
+
+print("Words ending with ing:", ing_words)
+
+
+emails = re.findall(r'\S+@\S+', text)
+
+print("Emails:", emails)
+
+# ---------------- STOPWORD REMOVAL ----------------
+stop_words = set(stopwords.words('english'))
+
+
+filtered = []
+
+
+for word in clean_words:
+
+
+    if word not in stop_words:
+
+
+        filtered.append(word)
+
+
+# ---------------- STEMMING ----------------
+
+print("\n[5] STEMMING")
+
+
+ps = PorterStemmer()
+
+stemmed = []
+
+
+for word in filtered:
+
+    stemmed.append(ps.stem(word))
+
+
+print(stemmed[:5])
+
+
+# ---------------- LEMMATIZATION ----------------
+print("\n[6] LEMMATIZATION")
+
+
+lem = WordNetLemmatizer()
+
+
+lemmatized = []
+
+
+for word in filtered:
+
+    lemmatized.append(lem.lemmatize(word))
+
+
+print(lemmatized[:5])
+
+
+# ---------------- POS TAGGING ----------------
+
+print("\n[7] POS TAGGING")
+
+
+tags = nltk.pos_tag(filtered)
+
+
+print(tags[:5])
+
+
+# ---------------- BIGRAMS ----------------
+bg = list(bigrams(filtered))
+
+print(bg[:5])
+
+# ---------------- SENTIMENT ----------------
+print("\n[8] BIGRAMS")
+print("\n[9] SENTIMENT ANALYSIS")
+
+
+
+sia = SentimentIntensityAnalyzer()
+
+
+score = sia.polarity_scores(text)
+
+
+print(score)
+
+
+# ---------------- KEYWORDS ----------------
+print("\n[10] KEYWORDS")
+
+
+keywords = Counter(filtered).most_common(3)
+
+print(keywords)
+
+
+# ---------------- WORD DISTANCE ----------------
+print("\n[11] WORD DISTANCE")
+
+
+if len(clean_words) >= 2:
+
+    w1 = clean_words[0]
+
+    w2 = clean_words[1]
+
+
+    distance = abs(len(w1) - len(w2))
+
+
+    print("Distance between", w1, "and", w2, ":", distance)
+
+
+
+NGRAM
+
+
+import nltk
+from nltk.corpus import brown, treebank
+from nltk.util import bigrams, trigrams
+from collections import Counter
+
+
+# Downloads
+nltk.download('brown')
+nltk.download('treebank')
+
+
+# Clean Brown corpus words
+brown_words = []
+
+
+for word in brown.words():
+
+
+    if word.isalpha():
+
+
+        brown_words.append(word.lower())
+
+# Clean WSJ corpus words
+
+wsj_words = []
+
+
+for word in treebank.words():
+
+    if word.isalpha():
+
+
+        wsj_words.append(word.lower())
+
+
+# Input word
+
+input_word = input("Enter a word: ").lower()
+
+
+
+# ---------------- FUNCTION ----------------
+
+def ngram_analysis(words, corpus_name):
+
+
+    print("\nCorpus :", corpus_name)
+
+    print("-" * 50)
+
+
+    # ---------------- BIGRAMS ----------------
+    bg_list = []
+
+
+    for bg in bigrams(words):
+
+        if bg[0] == input_word:
+
+
+            bg_list.append(bg)
+
+
+    bg_count = Counter(bg_list)
+
+    print("\nBigrams")
+
+
+    for bg, count in bg_count.most_common(5):
+
+
+        probability = count / len(bg_list)
+
+        print(bg, " Probability =", round(probability, 4))
+
+
+
+    # ---------------- TRIGRAMS ----------------
+
+    tg_list = []
+
+
+    for tg in trigrams(words):
+
+
+        if tg[0] == input_word:
+
+
+            tg_list.append(tg)
+
+    tg_count = Counter(tg_list)
+
+
+    print("\nTrigrams")
+
+    for tg, count in tg_count.most_common(5):
+
+
+        probability = count / len(tg_list)
+
+        print(tg, " Probability =", round(probability, 4))
+
+
+
+# Brown Corpus
+ngram_analysis(brown_words, "Brown")
+
+
+# WSJ Corpus
+ngram_analysis(wsj_words, "WSJ")
+
+VITERBI
+
+import nltk
+from nltk.corpus import brown
+
+from collections import defaultdict, Counter
+
+
+# Downloads
+nltk.download('brown')
+nltk.download('universal_tagset')
+
+nltk.download('punkt')
+
+
+# Load tagged sentences
+
+corpus = brown.tagged_sents(tagset='universal')[:2000]
+
+
+# ---------------- TRAINING ----------------
+transition = defaultdict(Counter)
+emission = defaultdict(Counter)
+tag_count = Counter()
+
+
+for sentence in corpus:
+
+    prev_tag = "START"
+
+
+    for word, tag in sentence:
+
+        word = word.lower()
+
+
+        transition[prev_tag][tag] += 1
+        emission[tag][word] += 1
+
+        tag_count[tag] += 1
+
+
+        prev_tag = tag
+
+
+# ---------------- VITERBI FUNCTION ----------------
+
+def viterbi(words):
+
+    prev_tag = "START"
+
+    result = []
+
+
+    for word in words:
+
+
+        best_tag = ""
+        best_score = 0
+
+
+        for tag in emission:
+
+
+            # Transition probability
+            trans_prob = transition[prev_tag][tag] + 1
+
+
+            # Emission probability
+            emit_prob = emission[tag][word.lower()] + 1
+
+            # Viterbi score
+            score = trans_prob * emit_prob
+
+
+            if score > best_score:
+
+                best_score = score
+                best_tag = tag
+
+        result.append((word, best_tag))
+
+        prev_tag = best_tag
+
+    return result
+
+# ---------------- INPUT ----------------
+sentence = input("Enter a sentence: ")
+
+words = nltk.word_tokenize(sentence)
+
+# ---------------- OUTPUT ----------------
+tags = viterbi(words)
+
+print("\nWord\tPOS Tag")
+print("-" * 25)
+
+for word, tag in tags:
+
+    print(word, "\t", tag)
