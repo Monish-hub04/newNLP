@@ -4,37 +4,62 @@ import nltk
 from nltk.corpus import brown
 from collections import Counter, defaultdict
 
+# Download datasets
 nltk.download('brown')
 nltk.download('universal_tagset')
 
+# Load corpus
 corpus = brown.tagged_words(tagset='universal')[:5000]
 
+# Count tags and word-tag pairs
 tag_count = Counter()
 word_tag_count = defaultdict(Counter)
 
-for word,tag in corpus:
+for word, tag in corpus:
     word = word.lower()
     tag_count[tag] += 1
     word_tag_count[word][tag] += 1
 
+
 def simple_hmm(sentence):
+
     words = sentence.lower().split()
 
     for word in words:
+
         print("\nWord:", word)
-        print("Tag\ttran_prob\temiss_prob\tScore")
+        print("Tag\tTran_Prob\tEmiss_Prob\tScore")
+
         best_tag = ""
         max_score = 0
-        tran_prob = tag_count[tag]
-        emiss_prob = word_tag_count[word][tag]
-        Score = trans_prob * emiss_prob
-        print(f"{tag}\t\t{tran_prob}\t\t{emiss_prob}\t\t{Score}") 
 
-        if Score > max_score:
-            max_score = Score
-            best_tag = tag
-        print("BEST TAG", best_tag)
-sentence = input("Enter a sentence")
+        # MISTAKE 1:
+        # You used tag without loop
+        # Need loop for all tags
+
+        for tag in tag_count:
+
+            # Transition Probability
+            tran_prob = tag_count[tag] / sum(tag_count.values())
+
+            # Emission Probability
+            emiss_prob = word_tag_count[word][tag] / tag_count[tag]
+
+            # MISTAKE 2:
+            # You used trans_prob instead of tran_prob
+
+            score = tran_prob * emiss_prob
+
+            print(f"{tag}\t{tran_prob:.4f}\t\t{emiss_prob:.4f}\t\t{score:.6f}")
+
+            if score > max_score:
+                max_score = score
+                best_tag = tag
+
+        print("BEST TAG:", best_tag)
+
+
+sentence = input("Enter a sentence: ")
 simple_hmm(sentence)
 
 BUILDING A POS TAGGER 
