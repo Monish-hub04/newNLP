@@ -667,3 +667,63 @@ df = pd.get_dummies(df, columns=["Department"])
 
 le = LabelEncoder()
 # 3. Categorical Data Encoding
+
+
+
+# PCA - PRINCIPAL COMPONENT ANALYSIS
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Create Dataset
+data = {
+    'Maths':[90,85,88,75,95],
+    'Science':[92,80,86,70,98],
+    'English':[85,78,82,72,96]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Dataset")
+print(df)
+
+# Feature Scaling
+scaler = StandardScaler()
+
+scaled_data = scaler.fit_transform(df)
+
+print("\nScaled Data")
+print(scaled_data)
+
+# Apply PCA
+pca = PCA(n_components=2)
+
+pca_result = pca.fit_transform(scaled_data)
+
+# Create PCA DataFrame
+pca_df = pd.DataFrame(
+    pca_result,
+    columns=['PC1','PC2']
+)
+
+print("\nPCA Result")
+print(pca_df)
+
+# Explained Variance
+print("\nExplained Variance Ratio:")
+print(pca.explained_variance_ratio_)
+
+# Visualization
+plt.scatter(pca_df['PC1'], pca_df['PC2'])
+
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+
+plt.title("PCA Visualization")
+
+plt.grid(True)
+
+plt.show()
