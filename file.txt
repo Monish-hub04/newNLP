@@ -1,0 +1,669 @@
+# EXERCISE 1
+# IMPLEMENTATION OF PROGRAMS USING PYTHON LIBRARIES
+
+# ================= NUMPY =================
+
+import numpy as np
+
+print("NUMPY OPERATIONS")
+
+# Create 3x3 Array
+a = np.random.randint(1,20,size=(3,3))
+
+print("Array:")
+print(a)
+
+# Mean, Sum, Standard Deviation
+print("Mean:", np.mean(a))
+print("Sum:", np.sum(a))
+print("Standard Deviation:", np.std(a))
+
+# Matrix Multiplication
+x = np.array([[1,2],
+              [3,4]])
+
+y = np.array([[5,6],
+              [7,8]])
+
+print("Matrix Multiplication:")
+print(x @ y)
+
+# Even and Odd Numbers
+arr = np.array([1,2,3,4,5,6])
+
+print("Even Numbers:", arr[arr%2==0])
+print("Odd Numbers:", arr[arr%2!=0])
+
+
+# ================= PANDAS =================
+
+import pandas as pd
+
+print("\nPANDAS OPERATIONS")
+
+data = {
+    'Order_No':[1,2,3,4],
+    'Amount':[500,700,800,600],
+    'Customer_ID':[101,102,101,103]
+}
+
+df = pd.DataFrame(data)
+
+print(df)
+
+print("Average Amount:")
+print(df.groupby('Customer_ID')['Amount'].mean())
+
+
+# ================= MATPLOTLIB =================
+
+import matplotlib.pyplot as plt
+
+products = ['A','B','C','D']
+sales = [100,200,150,250]
+
+plt.plot(products,sales)
+
+plt.title("Sales Trend")
+plt.xlabel("Products")
+plt.ylabel("Sales")
+
+plt.show()
+
+
+# ================= SCIPY =================
+
+from scipy.integrate import quad
+
+f = lambda x: x**2 + 2*x
+
+result,error = quad(f,0,4)
+
+print("Integration Result:", result)
+
+
+# ================= SCIKIT LEARN =================
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+X_train,X_test,y_train,y_test = train_test_split(
+    X,y,test_size=0.2
+)
+
+model = KNeighborsClassifier()
+
+model.fit(X_train,y_train)
+
+print("Accuracy:", model.score(X_test,y_test))
+
+
+
+# EXERCISE 2
+# DATA PREPROCESSING
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+# 1. Data Loading and Initialization
+data = {
+    "Age": [20, 21, None, 23, 24],
+    "Gender": ["Male", "Female", "Female", "Male", "Male"],
+    "Department": ["IT", "CSE", "ECE", "IT", "CSE"],
+    "Marks": [80, 75, 90, 85, 95]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Data")
+print(df)
+
+# 2. Handling Missing Values
+df["Age"].fillna(df["Age"].mean(), inplace=True)
+
+# Label Encoding
+df["Gender"] = le.fit_transform(df["Gender"])
+# One Hot Encoding
+print("\nAfter Encoding")
+print(df)
+# 4. Feature Scaling (Normalization)
+df[["Age", "Marks"]] = scaler.fit_transform(df[["Age", "Marks"]])
+
+
+
+X = df.drop("Marks", axis=1)
+y = df["Marks"]
+# Split data
+    X, y, test_size=0.2, random_state=42
+)
+
+print("\nTraining Data")
+
+print("\nTesting Data")
+print(X_test)
+
+
+# EXERCISE 3
+# EXPLORATORY DATA ANALYSIS
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Create dataset
+dict_data = {
+    "Age":[23,28,37,np.nan,49,26,30,38,104,45,25,np.nan,29,34,np.nan],
+
+    "Experience":[-2,7,16,8,np.nan,28,5,-16,np.nan,8,89,7,12,18,-6],
+
+    "Salary":[800000,1200000,600000,np.nan,10000000,
+              800000,2400000,np.nan,1200000,2400000,
+              np.nan,1600000,100000,700000,400000]
+}
+
+data = pd.DataFrame(dict_data)
+
+print("Original Data")
+print(data)
+
+# ---------------------------------------------------
+# 2. Identify and correct human errors (Negative Values)
+# ---------------------------------------------------
+
+data['Experience'] = data['Experience'].abs()
+
+print("\nAfter Correcting Negative Values")
+print(data)
+
+# ---------------------------------------------------
+# 3. Handling Missing Values
+# ---------------------------------------------------
+
+data['Age'].fillna(data['Age'].mean(), inplace=True)
+
+data['Experience'].fillna(data['Experience'].mean(), inplace=True)
+
+data['Salary'].fillna(data['Salary'].mean(), inplace=True)
+
+print("\nAfter Handling Missing Values")
+print(data)
+
+# ---------------------------------------------------
+# 4. Detect Outliers using Z-score
+# ---------------------------------------------------
+
+z_scores = np.abs(stats.zscore(data[['Age','Experience','Salary']]))
+
+print("\nZ-Scores")
+print(z_scores)
+
+# Outliers
+outliers = data[(z_scores > 3).any(axis=1)]
+
+print("\nOutliers")
+print(outliers)
+
+# ---------------------------------------------------
+# 5. Remove Outliers
+# ---------------------------------------------------
+
+data_no_outliers = data[(z_scores < 3).all(axis=1)]
+
+print("\nData After Removing Outliers")
+print(data_no_outliers)
+
+# ---------------------------------------------------
+# 6. Visualization
+# ---------------------------------------------------
+
+plt.hist(data['Salary'], bins=5, edgecolor='black')
+
+plt.title("Salary Distribution")
+plt.xlabel("Salary")
+plt.ylabel("Frequency")
+
+plt.show()
+
+
+
+# EXERCISE 4
+# FEATURE ENGINEERING
+
+import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import StandardScaler
+
+data = {
+    'YearsExperience':[1,2,3,4,5],
+    'EducationLevel':['Bachelor','Master','PhD','Bachelor','Master'],
+    'Salary':[40000,50000,70000,45000,55000]
+}
+
+df = pd.DataFrame(data)
+
+print(df)
+
+# One Hot Encoding
+df = pd.get_dummies(df, columns=['EducationLevel'])
+
+print(df)
+
+# Feature Scaling
+scaler = StandardScaler()
+
+df[['Salary']] = scaler.fit_transform(df[['Salary']])
+
+print(df)
+
+# Log Transformation
+df['LogSalary'] = np.log(df['Salary'] + 1)
+print(X_train)
+
+print(df)
+
+
+# EXERCISE 5A
+# LINEAR REGRESSION
+
+X_train, X_test, y_train, y_test = train_test_split(
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Sample data
+data = {
+    "Age": [25, 30, 35, 40, 45, 50],
+    "Glucose": [80, 90, 100, 110, 140, 160]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# Input and output
+X = df[["Age"]]
+y = df["Glucose"]
+
+# Create model
+model = LinearRegression()
+
+# Train model
+model.fit(X, y)
+
+# Predict values
+predicted = model.predict(X)
+
+# Scatter plot of original data
+plt.scatter(df["Age"], df["Glucose"])
+
+# Regression line
+plt.plot(df["Age"], predicted)
+
+# Labels and title
+plt.xlabel("Age")
+plt.ylabel("Glucose Level")
+plt.title("Linear Regression")
+
+# Show graph
+plt.show()
+
+user_age = float(input("Enter age: "))
+
+prediction = model.predict([[user_age]])
+
+print(f"{prediction[0]:.2f}")
+
+# EXERCISE 5B
+# LOGISTIC REGRESSION
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+
+# Sample data
+data = {
+    "Age": [25, 30, 35, 40, 45, 50],
+    "Glucose": [80, 90, 100, 110, 140, 160]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# Create target column
+df["Diabetes"] = (df["Glucose"] > 126).astype(int)
+
+# Input and output
+X = df[["Age"]]
+y = df["Diabetes"]
+
+# Train Logistic Regression model
+model = LogisticRegression()
+model.fit(X, y)
+
+# Scatter plot of original data
+plt.scatter(df["Age"], df["Diabetes"])
+
+# Smooth age values
+age_range = np.linspace(df["Age"].min(),
+                        df["Age"].max(), 100).reshape(-1,1)
+
+# Predict probability
+probability = model.predict_proba(age_range)[:,1]
+
+# Sigmoid curve
+plt.plot(age_range, probability)
+
+# Labels and title
+plt.xlabel("Age")
+plt.ylabel("Probability of Diabetes")
+plt.title("Logistic Regression Sigmoid Curve")
+
+# Show graph
+plt.show()
+
+
+user_age = float(input("Enter age: "))
+
+prediction = model.predict([[user_age]])
+
+print(int(prediction[0]))
+
+
+# EXERCISE 6
+# DECISION TREE
+
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2
+)
+
+# Create model
+model = DecisionTreeClassifier()
+
+# Train model
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+
+# Accuracy
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+# Plot tree
+plt.figure(figsize=(10,5))
+
+plot_tree(
+    model,
+    feature_names=iris.feature_names,
+    class_names=iris.target_names,
+    filled=True
+)
+
+plt.show()
+
+
+
+
+# EXERCISE 7
+# SUPPORT VECTOR MACHINE
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Lasso, Ridge
+from sklearn.metrics import mean_squared_error
+
+# Sample Dataset
+data = {
+    'Income':[5,6,7,8,9],
+    'Rooms':[3,4,5,6,7],
+    'Price':[200,250,300,350,400]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Income','Rooms']]
+y = df['Price']
+
+X_train,X_test,y_train,y_test = train_test_split(
+    X,y,test_size=0.2
+)
+
+# Lasso
+lasso = Lasso(alpha=0.1)
+
+lasso.fit(X_train,y_train)
+
+pred1 = lasso.predict(X_test)
+
+print("Lasso MSE:",
+      mean_squared_error(y_test,pred1))
+
+# Ridge
+ridge = Ridge(alpha=1.0)
+
+ridge.fit(X_train,y_train)
+
+pred2 = ridge.predict(X_test)
+
+print("Ridge MSE:",
+      mean_squared_error(y_test,pred2))
+
+
+# EXERCISE 9
+# HYPERPARAMETER OPTIMIZATION
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.model_selection import GridSearchCV
+
+iris = load_iris()
+
+X = iris.data
+
+y = iris.target
+
+params = {
+    'n_estimators':[50,100],
+    'max_depth':[2,3]
+}
+
+grid = GridSearchCV(
+    RandomForestClassifier(),
+    params
+)
+
+grid.fit(X,y)
+
+print("Best Parameters:",
+      grid.best_params_)
+
+print("Best Score:",
+      grid.best_score_)
+
+
+# EXERCISE 10
+# K-MEANS CLUSTERING
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Sample data
+data = {
+    "Age": [20, 22, 25, 30, 35, 40, 45, 50],
+    "Income": [20000, 22000, 25000, 30000,
+               35000, 40000, 45000, 50000]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# Features
+X = df[["Age", "Income"]]
+
+# K-Means model
+model = KMeans(n_clusters=2)
+
+# Train model
+model.fit(X)
+
+# Cluster labels
+df["Cluster"] = model.labels_
+
+print(df)
+
+# Scatter plot
+plt.scatter(df["Age"], df["Income"],
+            c=df["Cluster"])
+
+# Labels and title
+plt.xlabel("Age")
+plt.ylabel("Income")
+plt.title("K-Means Clustering")
+
+# Show graph
+plt.show()
+
+# EXERCISE 11
+# TIME SERIES FORECASTING
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv"
+
+df = pd.read_csv(url)
+
+print(df.head())
+
+# Plot Original Data
+plt.plot(df['Passengers'])
+
+plt.title("Air Passengers")
+
+plt.xlabel("Month")
+plt.ylabel("Passengers")
+
+plt.show()
+
+# Moving Average
+df['SMA'] = df['Passengers'].rolling(window=3).mean()
+
+print(df.head())
+
+# Plot Moving Average
+plt.plot(df['Passengers'], label='Original')
+plt.plot(df['SMA'], label='Moving Average')
+
+plt.legend()
+
+plt.show()
+
+# Forecast Value
+forecast = df['SMA'].iloc[-1]
+
+print("Forecast Value:", forecast)
+
+
+# EXERCISE 12
+# FORECASTING OF TIME SERIES DATA
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Dataset
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv"
+
+df = pd.read_csv(url)
+
+print(df.head())
+
+# Plot Original Data
+plt.plot(df['Passengers'])
+
+plt.title("Air Passengers Data")
+plt.xlabel("Month")
+plt.ylabel("Passengers")
+
+plt.show()
+
+# Simple Moving Average
+df['SMA'] = df['Passengers'].rolling(window=3).mean()
+
+print(df.head())
+
+# Plot Moving Average
+plt.plot(df['Passengers'], label='Original Data')
+
+plt.plot(df['SMA'], label='Moving Average')
+
+plt.title("Time Series Forecasting")
+plt.xlabel("Month")
+plt.ylabel("Passengers")
+
+plt.legend()
+
+plt.show()
+
+# Forecast Value
+forecast = df['SMA'].iloc[-1]
+
+print("Forecast Value:", forecast)
+
+
+
+pie chart----------
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {
+    "product": ["laptop", "mobile", "pc"],
+    "sales": [2000, 3000, 4000]
+}
+
+df = pd.DataFrame(data)
+
+plt.pie(df["sales"], labels = df["product"], autopct = '%1.1f%%')
+
+plt.title("Sales analysis")
+
+plt.show()
+
+# Features and Target
+# 5. Data Partitioning (Train-Test Split)
+print("\nAfter Normalization")
+print(df)
+
+scaler = MinMaxScaler()
+
+
+df = pd.get_dummies(df, columns=["Department"])
+
+le = LabelEncoder()
+# 3. Categorical Data Encoding
